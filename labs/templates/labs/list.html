@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Country</th>
+            <th>Location</th>
+            <th>e-mail</th>
+        </tr>
+        {% for lab in laboratories %}
+            <tr>
+                <td><a href="{% url 'labs:detail_view' pk=lab.pk %}">{{ lab.name }}</a></td>
+                <td>{{ lab.short_name }}</td>
+                <td>{{ lab.country }}</td>
+                <td>{{ lab.location }}</td>
+                <td>{{ lab.contact_email }}</td>
+                <td><a href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}" target="_blank">
+                    See on map
+                </a></td>
+            </tr>
+
+
+        {% endfor %}
+    </table>
+
+{% endblock %}

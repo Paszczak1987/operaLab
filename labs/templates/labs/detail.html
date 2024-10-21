@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>{{ lab.name }}</h2>
+    <p><strong>Lab code:</strong> {{ lab.short_name }}</p>
+    <p><strong>Country:</strong> {{ lab.country }}</p>
+    <p><strong>Location:</strong> {{ lab.location }}</p>
+    <p><strong>Contact e-mail:</strong> {{ lab.contact_email }}</p>
+    <p><a href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}" target="_blank">
+        See on Google Maps
+    </a></p>
+
+{% endblock %}
