@@ -4,6 +4,7 @@
 **/*.pyc
 
 .env
+.superuser
 
 venv
 
