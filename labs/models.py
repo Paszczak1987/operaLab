@@ -27,7 +27,7 @@ class Laboratory(models.Model):
             'country': self.country,
         }
         
-    
+        
     class Meta:
         verbose_name_plural = "Laboratories"
     

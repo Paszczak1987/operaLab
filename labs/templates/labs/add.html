@@ -1,0 +1,25 @@
+{% extends 'labs/labs_base.html' %}
+
+{% block header %}
+    <div class="container m-5">
+        <h5>Add new laboratory</h5>
+        <p>
+            Here You Can push new laboratory to company database.
+            Please specify laboratory essential details and click confirm button.
+        </p>
+    </div>
+{% endblock %}
+
+{% block labs_content %}
+    <div class="container m-5">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-outline-success" type="submit">Confirm</button>
+            <a class="btn btn-outline-secondary" href="{% url 'labs:list' %}">Back to lab list</a>
+        </form>
+
+    </div>
+
+
+{% endblock %}

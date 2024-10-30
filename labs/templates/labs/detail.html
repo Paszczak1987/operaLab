@@ -12,7 +12,9 @@
                 <strong>Address:</strong><br>{{ street }}<br>{{ city }}<br>{{ country }}
             </p>
             <p class="card-text"><strong>Contact:</strong><br>{{ lab.contact_email }}</p>
-            <a class="btn btn-outline-info" href="#">Edit</a>
+            <a class="btn btn-outline-secondary" href="{% url 'labs:list' %}">Back to lab list</a>
+            <a class="btn btn-outline-warning" href="#">Update</a>
+            <a class="btn btn-outline-danger" href="#">Remove</a>
             <a class="btn btn-outline-info"
                href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}"
                target="_blank">

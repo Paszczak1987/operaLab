@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView, TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, TemplateView, CreateView
 
 # Create your views here.
 from . import models
+from . import forms
 
 class LabHomeView(TemplateView):
     template_name = 'labs/home.html'
@@ -26,3 +28,8 @@ class LabDetailView(DetailView):
         return context
 
 
+class LabAddView(CreateView):
+    model = models.Laboratory
+    form_class = forms.LabAddForm
+    template_name = 'labs/add.html'
+    success_url = reverse_lazy('labs:list')
