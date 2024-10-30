@@ -7,13 +7,13 @@
             <h5 class="card-title">{{ lab.name }}</h5>
         </div>
         <div class="card-body">
-            <p class="card-text"><strong>Code:</strong><br>{{ lab.short_name }}</p>
+            <p class="card-text"><strong>Lab code:</strong><br>{{ lab.lab_code }}</p>
             <p class="card-text">
-                <strong>Address:</strong><br>{{ street }}<br>{{ city }}<br>{{ country }}
+                <strong>Address:</strong><br>{{ street }}{{ number }}<br>{{ zip_code }}{{ city }}<br>{{ country }}
             </p>
             <p class="card-text"><strong>Contact:</strong><br>{{ lab.contact_email }}</p>
             <a class="btn btn-outline-secondary" href="{% url 'labs:list' %}">Back to lab list</a>
-            <a class="btn btn-outline-warning" href="#">Update</a>
+            <a class="btn btn-outline-warning" href="{% url 'labs:edit' pk=lab.pk %}">Update</a>
             <a class="btn btn-outline-danger" href="#">Remove</a>
             <a class="btn btn-outline-info"
                href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}"

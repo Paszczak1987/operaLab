@@ -9,8 +9,8 @@
                 <th scope="col">Name</th>
                 <th scope="col">Code</th>
                 <th scope="col">Country</th>
-                <th scope="col">Leadership area</th>
                 <th scope="col">Address</th>
+                <th scope="col">Leadership area</th>
                 <th scope="col">e-mail</th>
                 <th scope="col"></th>
             </tr>
@@ -19,11 +19,11 @@
             {% for lab in laboratories %}
                 <tr>
                     <td><a class="link-underline link-underline-opacity-0"
-                           href="{% url 'labs:detail_view' pk=lab.pk %}">{{ lab.name }}</a></td>
-                    <td>{{ lab.short_name }}</td>
+                           href="{% url 'labs:detail_view' pk=lab.pk %}">{{ lab.short_name }}</a></td>
+                    <td>{{ lab.lab_code }}</td>
                     <td>{{ lab.country }}</td>
+                    <td>{{ lab.street }} {{ lab.number }}<br>{{ lab.zip_code }} {{ lab.city }}</td>
                     <td>{{ lab.leadership_area }}</td>
-                    <td>{{ lab.location }}</td>
                     <td>{{ lab.contact_email }}</td>
                     <td><a class="icon-link"
                            href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}" target="_blank">

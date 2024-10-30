@@ -2,10 +2,10 @@
 
 {% block header %}
     <div class="container mt-5 mb-5">
-        <h5>Add new laboratory</h5>
+        <h5>Update view for: <span class="text-warning-emphasis">{{ lab.short_name }} ({{ lab.lab_code }})</span></h5>
         <p>
-            Here You Can push new laboratory to company database.
-            <br>Please specify laboratory essential details and click confirm button.
+            Here You Can update existing laboratory data.
+            <br>Edit chosen laboratory details and click confirmation button.
         </p>
     </div>
 {% endblock %}
@@ -121,9 +121,9 @@
             </div>
 
             <!-- Pełna szerokość pola dla pozostałych elementów -->
-            <div class="form-floating mb-3">
-                {{ form.contact_email }}
+            <div class="mb-3">
                 {{ form.contact_email.label_tag }}
+                {{ form.contact_email }}
                 {% for error in form.contact_email.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
