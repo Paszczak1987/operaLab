@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'labs/labs_base.html' %}
 
 {% block content %}
 
@@ -13,15 +13,12 @@
             </p>
             <p class="card-text"><strong>Contact:</strong><br>{{ lab.contact_email }}</p>
             <a class="btn btn-outline-info" href="#">Edit</a>
-            <a class="btn btn-outline-info" href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}"
+            <a class="btn btn-outline-info"
+               href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}"
                target="_blank">
                 <i class="bi bi-geo-alt"></i>
             </a>
         </div>
-
-
     </div>
-
-
 
 {% endblock %}

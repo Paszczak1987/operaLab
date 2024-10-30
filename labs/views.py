@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 # Create your views here.
 from . import models
+
+class LabHomeView(TemplateView):
+    template_name = 'labs/home.html'
     
 class LabListView(ListView):
     model = models.Laboratory
@@ -21,4 +24,5 @@ class LabDetailView(DetailView):
         context['city'] = formatted_address['city']
         context['country'] = formatted_address['country']
         return context
-    
+
+
