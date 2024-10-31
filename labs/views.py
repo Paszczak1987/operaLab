@@ -14,20 +14,33 @@ class LabListView(ListView):
     template_name = 'labs/list.html'
     context_object_name = 'laboratories'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        laboratories_with_context = []
+        for lab in context[self.context_object_name]:
+            lab_info = {
+                'pk': lab.pk,
+                'short_name': lab.short_name,
+                'lab_code': lab.lab_code,
+                'street': lab.street,
+                'number': lab.number,
+                'zip_code': lab.zip_code,
+                'city': lab.city,
+                'country': lab.country,
+                'leadership_area': lab.leadership_area,
+                'contact_email': lab.contact_email,
+                'has_gps_coordinates': lab.has_gps_coordinates(),
+                'has_postal_address': lab.has_postal_address(),
+                'google_map_url': lab.google_map_url(),
+            }
+            laboratories_with_context.append(lab_info)
+        context['laboratories'] = laboratories_with_context
+        return context
+        
 class LabDetailView(DetailView):
     model = models.Laboratory
     template_name = 'labs/detail.html'
     context_object_name = 'lab'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        address = self.object.formatted_address()
-        context['street'] = address['street']
-        context['number'] = address['number']
-        context['zip_code'] = address['zip_code']
-        context['city'] = address['city']
-        context['country'] = address['country']
-        return context
 
 class LabAddView(CreateView):
     model = models.Laboratory
@@ -46,7 +59,6 @@ class LabAddView(CreateView):
             if 'lab_code' in str(e):
                 form.add_error('lab_code', 'Lab with this code already exists.')
             return self.form_invalid(form)
-        
 
 class LabEditView(UpdateView):
     model = models.Laboratory

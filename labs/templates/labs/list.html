@@ -2,33 +2,42 @@
 
 {% block labs_content %}
 
-    <div class="table-responsive m-5">
+    <div class="table-responsive mb-5 mt-5 mx-5">
         <table class="table table-hover align-middle">
             <thead>
             <tr>
-                <th scope="col">Name</th>
+                <th scope="col" style="width:140px;">Name</th>
+                <th scope="col"></th>
                 <th scope="col">Code</th>
                 <th scope="col">Country</th>
                 <th scope="col">Address</th>
                 <th scope="col">Leadership area</th>
                 <th scope="col">e-mail</th>
-                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             {% for lab in laboratories %}
                 <tr>
-                    <td><a class="link-underline link-underline-opacity-0"
-                           href="{% url 'labs:detail_view' pk=lab.pk %}">{{ lab.short_name }}</a></td>
+                    <td class="">
+                        <a class="link-underline link-underline-opacity-0"
+                           href="{% url 'labs:detail_view' pk=lab.pk %}">
+                            {{ lab.short_name }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if lab.has_gps_coordinates or lab.has_postal_address %}
+                            <a class="icon-link" href="{{ lab.google_map_url }}" target="_blank">
+                                <i class="bi bi-geo-alt"></i>
+                            </a>
+                        {% else %}
+                            <i class="bi bi-geo-alt text-secondary"></i>
+                        {% endif %}
+                    </td>
                     <td>{{ lab.lab_code }}</td>
                     <td>{{ lab.country }}</td>
                     <td>{{ lab.street }} {{ lab.number }}<br>{{ lab.zip_code }} {{ lab.city }}</td>
                     <td>{{ lab.leadership_area }}</td>
                     <td>{{ lab.contact_email }}</td>
-                    <td><a class="icon-link"
-                           href="https://www.google.com/maps?q={{ lab.latitude }},{{ lab.longitude }}" target="_blank">
-                        <i class="bi bi-geo-alt"></i>
-                    </a></td>
                 </tr>
             {% endfor %}
             </tbody>

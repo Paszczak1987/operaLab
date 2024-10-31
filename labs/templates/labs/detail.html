@@ -2,6 +2,42 @@
 
 {% block content %}
 
+    <div class="container  mt-5 mb-5">
+        <h5>Detail view for: <span class="text-warning-emphasis">{{ lab.name }}</span></h5>
+        <p class="lead text-wrap mb-2">
+            {% if lab.description != "" %}
+                {{ lab.description }}
+                <br>Laboratory details:
+            {% else %}
+                Laboratory details:
+            {% endif %}
+        </p>
+        <ul class="list-group">
+            <li class="list-group-item">
+                Short name: <strong><i>{{ lab.short_name }}</i></strong>
+            </li>
+            <li class="list-group-item">
+                Code: <strong><i>{{ lab.lab_code }}</i></strong>
+            </li>
+            <li class="list-group-item">
+                Laboratory location:
+                {% if lab.has_postal_address %}
+                    <br><span class="ps-2">Postal address:</span>
+                    <br><i><span class="ps-4 text-warning-emphasis"><strong>{{ lab.street }} {{ lab.number }}</strong></span></i>
+                    <br><i><span class="ps-4 text-warning-emphasis"><strong>{{ lab.zip_code }} {{ lab.city }}</strong></span></i>
+                    <br><i><span class="ps-4 text-warning-emphasis"><strong>{{ lab.country }}</strong></span></i>
+                {% else %}
+                    <strong><i>{{ lab.country }}</i></strong>
+                {% endif %}
+
+                {% if lab.has_gps_coordinates %}
+                    <br><span class="ps-2">GPS coordinates:</span>
+                    <br><i><span class="ps-4 text-warning-emphasis"><strong>{{ lab.latitude }} {{ lab.longitude }}</strong></span></i>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+
     <div class="card align-middle m-3">
         <div class="card-header">
             <h5 class="card-title">{{ lab.name }}</h5>
@@ -9,7 +45,7 @@
         <div class="card-body">
             <p class="card-text"><strong>Lab code:</strong><br>{{ lab.lab_code }}</p>
             <p class="card-text">
-                <strong>Address:</strong><br>{{ street }}{{ number }}<br>{{ zip_code }}{{ city }}<br>{{ country }}
+                <strong>Address:</strong><br>{{ lab.street }}{{ lab.number }}<br>{{ lab.zip_code }}{{ lab.city }}<br>{{ lab.country }}
             </p>
             <p class="card-text"><strong>Contact:</strong><br>{{ lab.contact_email }}</p>
             <a class="btn btn-outline-secondary" href="{% url 'labs:list' %}">Back to lab list</a>
@@ -22,5 +58,7 @@
             </a>
         </div>
     </div>
+
+
 
 {% endblock %}
