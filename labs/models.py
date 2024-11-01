@@ -47,15 +47,18 @@ class Laboratory(models.Model):
         return bool("" not in [self.street, self.number, self.zip_code, self.city])
 
     def google_map_url(self):
+        if self.has_gps_coordinates():
+            base_url = 'https://www.google.com/maps/search/'
+            coordinates = f"{self.latitude},{self.longitude}"
+            query = urlencode({'api': 1, 'query': coordinates})
+            return f"{base_url}?{query}"
         if self.has_postal_address():
             base_url = 'https://www.google.com/maps/search/'
             address_parts = [self.street, self.number, self.zip_code, self.city, self.country]
             address = ', '.join(filter(None, address_parts))
             query = urlencode({'api': 1, 'query': address})
             return f"{base_url}?{query}"
-        elif self.has_gps_coordinates():
-            base_url = 'https://www.google.com/maps/place/'
-            coordinates = f"{self.latitude},{self.longitude}"
-            query = urlencode({'api': 1, 'query': coordinates})
-            return f"{base_url}?{query}"
-        
+    
+    def google_map_url_2(self):
+        base_url = 'https://www.google.com/maps/search/'
+        return f"{base_url}?api=1&query={self.latitude},{self.longitude}"
