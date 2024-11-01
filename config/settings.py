@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3rd party apps
     # local apps
-    'labs.apps.LabsConfig'
+    'labs.apps.LabsConfig',
+    'personnel.apps.PersonnelConfig',
+    
 ]
 
 MIDDLEWARE = [

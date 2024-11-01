@@ -21,6 +21,22 @@
                         <li><a class="dropdown-item" href="{% url 'labs:add' %}">Create</a></li>
                     </ul>
                 </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Personnel
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'personnel:home' %}">About</a></li>
+{#                        <li>#}
+{#                            <hr class="dropdown-divider">#}
+{#                        </li>#}
+{#                        <li><a class="dropdown-item" href="{% url 'labs:list' %}">List</a></li>#}
+{#                        <li><a class="dropdown-item" href="{% url 'labs:add' %}">Create</a></li>#}
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </div>
