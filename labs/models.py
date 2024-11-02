@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 from django.utils.http import urlencode
 
 # Create your models here.
@@ -20,10 +21,44 @@ class Laboratory(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     
+    manager = models.CharField(max_length=100, default="not assigned", blank=True, null=True)
     contact_email = models.EmailField()
+    
+    group_manager = models.ForeignKey(
+        'personnel.GroupManager',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='laboratories',
+        default=None
+    )
     
     class Meta:
         verbose_name_plural = "Laboratories"
+    
+    def import_group_manager_model(self):
+        group_manager = apps.get_model('personnel', 'GroupManager')
+        return group_manager.objects.get(laboratories=self)
+    
+    def update_assigned_manager_name(self, assignment=True):
+        if assignment:
+            self.manager = f"{self.assigned_manager.first_name} {self.assigned_manager.last_name}"
+        else:
+            self.manager = "not assigned"
+        self.save()
+        self.refresh_from_db()
+        
+    def has_manager(self):
+        return self.manager != 'not assigned'
+    
+    def get_manager(self):
+        return f"{self.manager}" if self.has_manager() else "not assigned"
+    
+    def has_technicians(self):
+        return self.technicians.exists()
+    
+    def list_technicians(self):
+        return self.technicians.all() if self.has_technicians() else None
         
     def __str__(self):
         return f"{self.name} ({self.lab_code})"
@@ -62,3 +97,5 @@ class Laboratory(models.Model):
     def google_map_url_2(self):
         base_url = 'https://www.google.com/maps/search/'
         return f"{base_url}?api=1&query={self.latitude},{self.longitude}"
+    
+    
