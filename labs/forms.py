@@ -13,7 +13,7 @@ class LabAddForm(forms.ModelForm):
         ]
         labels = {
             'name': 'Laboratory full name',
-            'short_name': 'Shortend name',
+            'short_name': 'Shortened name',
             'contact_email': 'Email address'
         }
         widgets = {
@@ -41,7 +41,7 @@ class LabAddForm(forms.ModelForm):
     def clean_leadership_area(self):
         leadership_area = self.cleaned_data.get('leadership_area')
         if re.search(r'\d', leadership_area):
-            raise forms.ValidationError("Leadership area cannot contain numeric values.")
+            raise forms.ValidationError("Cannot contain numeric values.")
         return leadership_area
     
     def clean_latitude(self):

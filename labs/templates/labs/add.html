@@ -1,11 +1,11 @@
 {% extends 'labs/labs_base.html' %}
+{% load widget_tweaks %}
 
 {% block header %}
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5 mb-2">
         <h5>Add new laboratory</h5>
-        <p>
-            Here You Can push new laboratory to company database.
-            <br>Please specify laboratory essential details and click confirm button.
+        <p>Here You Can push a new laboratory to company database.
+            <br>Please specify laboratory essential details and click <span class="text-success-emphasis">confirm</span> button.
         </p>
     </div>
 {% endblock %}
@@ -19,115 +19,280 @@
             </div>
         {% endif %}
 
-        <form method="post" id="labForm" class="border p-4 rounded">
+        <form method="post" id="laboratory-add-form" class="border p-4 rounded needs-validation" novalidate>
             {% csrf_token %}
 
             <!-- Pola obok siebie w jednym wierszu -->
             <div class="row">
                 <div class="col-md-4 mb-3">
                     {{ form.name.label_tag }}
-                    {{ form.name }}
-                    {% for error in form.name.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.name.value %}
+                        {{ form.name }}
+                    {% else %}
+                        {% if not form.name.errors %}
+                            {{ form.name|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.name|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.name.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-4 mb-3">
                     {{ form.short_name.label_tag }}
-                    {{ form.short_name }}
-                    {% for error in form.short_name.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.short_name.value %}
+                        {{ form.short_name }}
+                    {% else %}
+                        {% if not form.short_name.errors %}
+                            {{ form.short_name|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.short_name|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.short_name.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-2 mb-3">
                     {{ form.lab_code.label_tag }}
-                    {{ form.lab_code }}
-                    {% for error in form.lab_code.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.lab_code.value %}
+                        {{ form.lab_code }}
+                    {% else %}
+                        {% if not form.lab_code.errors %}
+                            {{ form.lab_code|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.lab_code|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.lab_code.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-2 mb-3">
                     {{ form.leadership_area.label_tag }}
-                    {{ form.leadership_area }}
-                    {% for error in form.leadership_area.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.leadership_area.value %}
+                        {{ form.leadership_area }}
+                    {% else %}
+                        {% if not form.leadership_area.errors %}
+                            {{ form.leadership_area|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.leadership_area|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.leadership_area.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
             </div>
 
             <!-- Pełna szerokość pola -->
             <div class="mb-3">
                 {{ form.description.label_tag }}
-                {{ form.description }}
-                {% for error in form.description.errors %}
-                    <div class="text-danger">{{ error }}</div>
-                {% endfor %}
+                {% if not form.description.value %}
+                    {{ form.description }}
+                {% else %}
+                    {% if not form.description.errors %}
+                        {{ form.description|add_class:"is-valid" }}
+                        <div class="valid-feedback">Looks good!</div>
+                    {% else %}
+                        {{ form.description|add_class:"is-invalid" }}
+                        <div class="invalid-feedback">
+                            {% for e in form.description.errors %}
+                                {{ e }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
 
             <!-- Pola obok siebie w jednym wierszu -->
             <div class="row">
+
                 <div class="col-md-3 mb-3">
                     {{ form.street.label_tag }}
-                    {{ form.street }}
-                    {% for error in form.street.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.street.value %}
+                        {{ form.street }}
+                    {% else %}
+                        {% if not form.street.errors %}
+                            {{ form.street|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.street|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.street.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-1 mb-3">
                     {{ form.number.label_tag }}
-                    {{ form.number }}
-                    {% for error in form.number.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.number.value %}
+                        {{ form.number }}
+                    {% else %}
+                        {% if not form.number.errors %}
+                            {{ form.number|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.number|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.number.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-3 mb-3">
                     {{ form.city.label_tag }}
-                    {{ form.city }}
-                    {% for error in form.city.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.city.value %}
+                        {{ form.city }}
+                    {% else %}
+                        {% if not form.city.errors %}
+                            {{ form.city|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.city|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.city.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-2 mb-3">
                     {{ form.zip_code.label_tag }}
-                    {{ form.zip_code }}
-                    {% for error in form.zip_code.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.zip_code.value %}
+                        {{ form.zip_code }}
+                    {% else %}
+                        {% if not form.zip_code.errors %}
+                            {{ form.zip_code|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.zip_code|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.zip_code.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-3 mb-3">
                     {{ form.country.label_tag }}
-                    {{ form.country }}
-                    {% for error in form.country.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.country.value %}
+                        {{ form.country }}
+                    {% else %}
+                        {% if not form.country.errors %}
+                            {{ form.country|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.country|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.country.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
             </div>
 
             <!-- Pola koordynatów w jednym wierszu -->
             <div class="row">
+
                 <div class="col-md-6 mb-3">
                     {{ form.latitude.label_tag }}
-                    {{ form.latitude }}
-                    {% for error in form.latitude.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.latitude.value %}
+                        {{ form.latitude }}
+                    {% else %}
+                        {% if not form.latitude.errors %}
+                            {{ form.latitude|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.latitude|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.latitude.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-6 mb-3">
                     {{ form.longitude.label_tag }}
-                    {{ form.longitude }}
-                    {% for error in form.longitude.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if not form.longitude.value %}
+                        {{ form.longitude }}
+                    {% else %}
+                        {% if not form.longitude.errors %}
+                            {{ form.longitude|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.longitude|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.longitude.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
             </div>
 
             <!-- Pełna szerokość pola dla pozostałych elementów -->
-            <div class="form-floating mb-3">
-                {{ form.contact_email }}
+
+            <div class="mb-3">
                 {{ form.contact_email.label_tag }}
-                {% for error in form.contact_email.errors %}
-                    <div class="text-danger">{{ error }}</div>
-                {% endfor %}
+                {% if not form.contact_email.value %}
+                    {{ form.contact_email }}
+                {% else %}
+                    {% if not form.contact_email.errors %}
+                        {{ form.contact_email|add_class:"is-valid" }}
+                        <div class="valid-feedback">Looks good!</div>
+                    {% else %}
+                        {{ form.contact_email|add_class:"is-invalid" }}
+                        <div class="invalid-feedback">
+                            {% for e in form.contact_email.errors %}
+                                {{ e }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
+
+            {#            <div class="form-floating mb-3">#}
+            {#                {{ form.contact_email }}#}
+            {#                {{ form.contact_email.label_tag }}#}
+            {#                {% for error in form.contact_email.errors %}#}
+            {#                    <div class="text-danger">{{ error }}</div>#}
+            {#                {% endfor %}#}
+            {#            </div>#}
 
             <button type="submit" class="btn btn-outline-success">Confirm</button>
             <a href="{% url 'labs:list' %}" class="btn btn-outline-secondary ms-3">Back to list</a>

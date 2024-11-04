@@ -5,9 +5,28 @@ from django.utils.http import urlencode
 # Create your models here.
 class Laboratory(models.Model):
     
-    name = models.CharField(max_length=75, unique=True)
-    short_name = models.CharField(max_length=25, unique=True)
-    lab_code = models.CharField(max_length=10, default="", unique=True)
+    name = models.CharField(
+        max_length=75,
+        unique=True,
+        error_messages={
+            'unique': "This name already exists."
+        }
+    )
+    short_name = models.CharField(
+        max_length=25,
+        unique=True,
+        error_messages={
+            'unique': "This name already exists."
+        }
+    )
+    lab_code = models.CharField(
+        max_length=10,
+        default="",
+        unique=True,
+        error_messages={
+            'unique': "This code already exists."
+        }
+    )
     leadership_area = models.CharField(max_length=5, default="")
     
     description = models.TextField(default="", blank=True)
@@ -52,13 +71,13 @@ class Laboratory(models.Model):
         return self.manager != 'not assigned'
     
     def get_manager(self):
-        return f"{self.manager}" if self.has_manager() else "not assigned"
+        return f"{self.manager}" if self.has_manager() else None
     
     def has_technicians(self):
         return self.technicians.exists()
     
     def list_technicians(self):
-        return self.technicians.all() if self.has_technicians() else None
+        return list(self.technicians.all()) if self.has_technicians() else None
         
     def __str__(self):
         return f"{self.name} ({self.lab_code})"

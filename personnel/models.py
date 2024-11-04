@@ -1,7 +1,7 @@
 from django.db import models
 from labs.models import Laboratory
 
-
+# Create your models here.
 class Employee(models.Model):
     
     first_name = models.CharField(max_length=100, default="", null=True, blank=True)
@@ -36,17 +36,21 @@ class LabManager(Employee):
         related_name='assigned_manager'
     )
     
-    def assign_laboratory(self, laboratory):
+    ##############
+    # Laboratory #
+    
+    def attach_laboratory(self, laboratory):
+        """Attach manager to laboratory. If manager has technicians attached they will also be attached."""
+        """If laboratory has technicians inside they will get manager"""
         self.laboratory = laboratory
         self.save()
         if laboratory:
             laboratory.update_assigned_manager_name()
         if self.has_technicians():
             self._update_technicians_lab()
-    
-    def _update_technicians_lab(self):
-        for technician in self.technicians.all():
-            technician.assign_laboratory(self.laboratory)
+        if laboratory.has_manager():
+            for tech in laboratory.list_technicians():
+                tech.attach_manager(self)
     
     def has_laboratory(self):
         return self.laboratory is not None
@@ -54,13 +58,22 @@ class LabManager(Employee):
     def get_laboratory(self):
         return f"{self.laboratory!r}" if self.has_laboratory() else None
     
+    ###############
+    # Technicians #
+
     def has_technicians(self):
         return self.technicians.exists()
     
     def list_technicians(self):
         return self.technicians.all() if self.has_technicians() else None
+   
+    def _update_technicians_lab(self):
+        for technician in self.technicians.all():
+            technician.attach_laboratory(self.laboratory)
+   
     
     def retire(self):
+        """Detache manager from laboratory and from technicians in it"""
         self.laboratory.update_assigned_manager_name(False)
         self.laboratory = None
         self.save()
@@ -87,12 +100,10 @@ class Technician(Employee):
         related_name='technicians'
     )
     
-    def assign_laboratory(self, laboratory):
-        self.laboratory = laboratory
-        self.save()
-        # self.refresh_from_db()
+    ###########
+    # Manager #
         
-    def assign_manager(self, manager):
+    def attach_manager(self, manager):
         self.manager = manager
         self.save()
     
@@ -100,17 +111,24 @@ class Technician(Employee):
         return self.manager is not None
     
     def get_manager(self):
-        return f"{self.manager!r}" if self.has_manager() else "not assigned"
+        return f"{self.manager!r}" if self.has_manager() else None
     
     def remove_manager(self):
         self.manager = None
+        self.save()
+        
+    ##############
+    # Laboratory #
+    
+    def attach_laboratory(self, laboratory):
+        self.laboratory = laboratory
         self.save()
     
     def has_laboratory(self):
         return self.laboratory is not None
     
     def get_laboratory(self):
-        return f"{self.laboratory!r}" if self.has_laboratory() else "not assigned"
+        return f"{self.laboratory!r}" if self.has_laboratory() else None
     
     def remove_laboratory(self):
         self.laboratory = None

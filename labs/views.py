@@ -1,4 +1,5 @@
-from django.urls import reverse_lazy
+from django.http import JsonResponse
+from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView
 from django.db import IntegrityError
 
@@ -48,22 +49,24 @@ class LabAddView(CreateView):
     template_name = 'labs/add.html'
     success_url = reverse_lazy('labs:list')
     
-    def form_valid(self, form):
-        try:
-            return super().form_valid(form)
-        except IntegrityError as e:
-            if 'name' in str(e):
-                form.add_error('name', 'Lab with this name already exists.')
-            if 'short_name' in str(e):
-                form.add_error('short_name', 'Lab with this short name already exists.')
-            if 'lab_code' in str(e):
-                form.add_error('lab_code', 'Lab with this code already exists.')
-            return self.form_invalid(form)
+    # def form_valid(self, form):
+    #     try:
+    #         return super().form_valid(form)
+    #     except IntegrityError as e:
+    #         if 'name' in str(e):
+    #             form.add_error('name', 'This name already exists.')
+    #         if 'short_name' in str(e):
+    #             form.add_error('short_name', 'This name already exists.')
+    #         if 'lab_code' in str(e):
+    #             form.add_error('lab_code', 'This code already exists.')
+    #         return self.form_invalid(form)
 
 class LabEditView(UpdateView):
     model = models.Laboratory
     form_class = forms.LabAddForm
     template_name = 'labs/edit.html'
-    success_url = reverse_lazy('labs:list')
     context_object_name = 'lab'
+    
+    def get_success_url(self):
+        return reverse('labs:detail_view', kwargs={'pk': self.object.pk})
     
