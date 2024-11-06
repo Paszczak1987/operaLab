@@ -1,4 +1,5 @@
 {% extends 'labs/labs_base.html' %}
+{% load widget_tweaks %}
 
 {% block header %}
     <div class="container mt-5 mb-5">
@@ -24,20 +25,45 @@
 
             <!-- Pola obok siebie w jednym wierszu -->
             <div class="row">
+
                 <div class="col-md-4 mb-3">
                     {{ form.name.label_tag }}
-                    {{ form.name }}
-                    {% for error in form.name.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if is_same_name %}
+                        {{ form.name }}
+                    {% else %}
+                        {% if not form.name.errors %}
+                            {{ form.name|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.name|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.name.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-4 mb-3">
                     {{ form.short_name.label_tag }}
-                    {{ form.short_name }}
-                    {% for error in form.short_name.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                    {% if is_same_short %}
+                        {{ form.short_name }}
+                    {% else %}
+                        {% if not form.short_name.errors %}
+                            {{ form.short_name|add_class:"is-valid" }}
+                            <div class="valid-feedback">Looks good!</div>
+                        {% else %}
+                            {{ form.short_name|add_class:"is-invalid" }}
+                            <div class="invalid-feedback">
+                                {% for e in form.short_name.errors %}
+                                    {{ e }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
                 <div class="col-md-2 mb-3">
                     {{ form.lab_code.label_tag }}
                     {{ form.lab_code }}
@@ -130,7 +156,7 @@
             </div>
 
             <button type="submit" class="btn btn-outline-success">Confirm</button>
-            <a href="{% url 'labs:list' %}" class="btn btn-outline-secondary ms-3">Back to list</a>
+            <a href="{% url 'labs:detail_view' pk=lab.pk %}" class="btn btn-outline-secondary ms-3">Back</a>
         </form>
     </div>
 

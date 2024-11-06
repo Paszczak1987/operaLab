@@ -77,7 +77,7 @@ class Laboratory(models.Model):
         return self.technicians.exists()
     
     def list_technicians(self):
-        return list(self.technicians.all()) if self.has_technicians() else None
+        return list(self.technicians.all()) if self.has_technicians() else []
         
     def __str__(self):
         return f"{self.name} ({self.lab_code})"

@@ -70,3 +70,12 @@ class LabEditView(UpdateView):
     def get_success_url(self):
         return reverse('labs:detail_view', kwargs={'pk': self.object.pk})
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        lab = self.get_object()
+        form = context['form']
+        context['is_same_name'] = (form['name'].value() == lab.name)
+        context['is_same_short'] = (form['short_name'].value() == lab.short_name)
+        return context
+    
+    

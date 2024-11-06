@@ -2,77 +2,84 @@
 
 {% block labs_content %}
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5 mb-5 ">
 
-        <ul class="list-group">
+        <div class="container border rounded">
 
-            <li class="list-group-item">
-                <div class="container">
-                    <div class="row justify-content-between">
+            <div class="row">
 
-                        <div class="col p-0 align-self-center">
-                            <h5 class="mb-0"><span class="text-warning-emphasis">{{ lab.name }}</span></h5>
-                            {% if lab.description != "" %}
-                                <p class="text-wrap my-2">
-                                    {{ lab.description }}
-                                </p>
-                            {% endif %}
-                        </div>
-
-                        <div class="col p-0 text-center align-self-center">
-                            <a class="btn btn-outline-secondary" href="{% url 'labs:list' %}">Back to lab list</a>
-                            <a class="btn btn-outline-warning" href="{% url 'labs:edit' pk=lab.pk %}">Update</a>
-                            <a class="btn btn-outline-danger" href="#">Remove</a>
-                            {% if lab.has_postal_address or lab.has_gps_coordinates %}
-                                <a class="btn btn-outline-info"
-                                   href="{{ lab.google_map_url }}"
-                                   target="_blank">
-                                    <i class="bi bi-geo-alt"></i>
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
+                <div class="col-md-6 p-3 align-self-center">
+                    <h5 class="mb-0"><span class="text-warning-emphasis">{{ lab.name }}</span></h5>
+                    {% if lab.description != "" %}
+                        <p class="text-wrap mt-2 mb-0">
+                            {{ lab.description }}
+                        </p>
+                    {% endif %}
                 </div>
 
-            </li>
-
-            <li class="list-group-item p-0">
-
-                <div class="container text-center">
-                    <div class="row ">
-                        <div class="col py-2 border-end align-self-stretch align-middle d-flex flex-column justify-content-center">
-                            <div class="row text-start">
-                                <p class="my-1">Short name: <strong><i>{{ lab.short_name }}</i></strong></p>
-                            </div>
-                            <div class="row text-start">
-                                <p class="my-1">Code: <strong><i>{{ lab.lab_code }}</i></strong></p>
-                            </div>
-                            <div class="row text-start">
-                                <p class="my-1">Leadership: <strong><i>{{ lab.leadership_area }}</i></strong></p>
-                            </div>
-                            <div class="row text-start">
-                                <p class="my-1">Email address: <strong><i>{{ lab.contact_email }}</i></strong></p>
-                            </div>
-                        </div>
-                        <div class="col py-2 align-self-stretch align-middle d-flex flex-column justify-content-center">
-                            <p class="mb-0 mt-1 p-0 text-start">Laboratory location:</p>
-                            {% if lab.has_postal_address %}
-                                <p class="ms-2 mb-1 p-0 text-start fw-light">Postal address:</p>
-                                <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start"><strong><i>{{ lab.street }} {{ lab.number }}</i></strong></p>
-                                <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start"><strong><i>{{ lab.zip_code }} {{ lab.city }}</i></strong></p>
-                                <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start mb-1"><strong><i>{{ lab.country }}</i></strong></p>
-                            {% else %}
-                                <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start"><strong><i>{{ lab.country }}</i></strong></p>
-                            {% endif %}
-                            {% if lab.has_gps_coordinates %}
-                                <p class="ms-2 mb-0 p-0 text-start fw-light">GPS coordinates:</p>
-                                <p class="ms-4 mb-1 p-0 text-warning-emphasis text-start"><strong><i>{{ lab.latitude }} {{ lab.longitude }}</i></strong></p>
-                            {% endif %}
-                        </div>
-                    </div>
+                <div class="col-md-6 align-self-center p-3 d-flex justify-content-center">
+                    <a class="btn mx-2 btn-outline-secondary" href="{% url 'labs:list' %}">Back</a>
+                    <a class="btn mx-2 btn-outline-warning" href="{% url 'labs:edit' pk=lab.pk %}">Update</a>
+                    <a class="btn mx-2 btn-outline-danger" href="#">Remove</a>
+                    {% if lab.has_postal_address or lab.has_gps_coordinates %}
+                        <a class="btn mx-2 btn-outline-info"
+                           href="{{ lab.google_map_url }}"
+                           target="_blank">
+                            <i class="bi bi-geo-alt"></i>
+                        </a>
+                    {% endif %}
                 </div>
-            </li>
-        </ul>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top">
+                    <p class="mb-0 mt-1 p-0 text-start">Laboratory location:</p>
+                    {% if lab.has_postal_address %}
+                        <p class="ms-2 mb-0 p-0 text-start text-secondary">Postal address:</p>
+                        <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start">
+                            <strong><i>{{ lab.street }} {{ lab.number }}</i></strong></p>
+                        <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start">
+                            <strong><i>{{ lab.zip_code }} {{ lab.city }}</i></strong></p>
+                        <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start mb-1">
+                            <strong><i>{{ lab.country }}</i></strong></p>
+                    {% else %}
+                        <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start">
+                            <strong><i>{{ lab.country }}</i></strong>
+                        </p>
+                    {% endif %}
+                    {% if lab.has_gps_coordinates %}
+                        <p class="ms-2 mb-0 p-0 text-start text-secondary">GPS coordinates:</p>
+                        <p class="ms-4 mb-0 p-0 text-warning-emphasis text-start">
+                            <strong><i>{{ lab.latitude }} {{ lab.longitude }}</i></strong></p>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top">
+                    <p class="mb-0 mt-1 p-0 text-start">Essential data:</p>
+                    <p class="ms-2 mb-1 p-0 text-start">Short name: <strong><i>{{ lab.short_name }}</i></strong></p>
+                    <p class="ms-2 mb-1 p-0 text-start">Code: <strong><i>{{ lab.lab_code }}</i></strong></p>
+                    <p class="ms-2 mb-1 p-0 text-start">Group: <strong><i>{{ lab.leadership_area }}</i></strong></p>
+                    {% if lab.has_manager %}
+                        <p class="ms-2 mb-1 p-0 text-start">Manager: <strong><i>{{ lab.get_manager }}</i></strong></p>
+                    {% else %}
+                        <p class="ms-2 mb-1 p-0 text-start">Manager: <strong class=" text-danger"><i>
+                            not assigned
+                        </i></strong></p>
+                    {% endif %}
+                    <p class="ms-2 mb-1 p-0 text-start">Email address: <strong><i>{{ lab.contact_email }}</i></strong>
+                    </p>
+                </div>
+
+                <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top">
+                    <p class="mb-0 mt-1 p-0 text-start">Technicians:</p>
+                    {% for technician in lab.list_technicians %}
+                        <p class="ms-2 mb-1 p-0 text-start"><i>{{ technician }}</i></p>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
     </div>
 
 {% endblock %}
