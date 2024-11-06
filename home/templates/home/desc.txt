@@ -1,0 +1,9 @@
+OperaLab is an integrated laboratory data management system designed to efficiently manage laboratories, personnel, and infrastructure. With its intuitive interface, OperaLab centralizes data and streamlines the management of laboratory spaces, staff, and construction projects.
+
+Key Features:
+Laboratory Management: View, add, edit, and delete laboratories, with full access to location and details.
+Personnel Management: View staff lists, add new employees, update information, and assign staff to laboratories.
+Role and Permission Management: Define roles and manage permissions for staff members.
+Laboratory Data Storage: Centralize experimental and operational data, ensuring security and easy access.
+Building Management: Track the progress of construction projects related to laboratory facilities.
+OperaLab simplifies the complex tasks of laboratory management, providing a centralized solution for efficient operation and data handling.

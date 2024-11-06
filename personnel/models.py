@@ -57,10 +57,13 @@ class LabManager(Employee):
     
     def get_laboratory(self):
         return f"{self.laboratory!r}" if self.has_laboratory() else None
+   
+    # Laboratory #
+    ##############
     
     ###############
     # Technicians #
-
+    
     def has_technicians(self):
         return self.technicians.exists()
     
@@ -71,6 +74,8 @@ class LabManager(Employee):
         for technician in self.technicians.all():
             technician.attach_laboratory(self.laboratory)
    
+    # Technicians #
+    ###############
     
     def retire(self):
         """Detache manager from laboratory and from technicians in it"""
@@ -82,6 +87,7 @@ class LabManager(Employee):
         if self.has_technicians():
             for technician in self.technicians.all():
                 technician.remove_manager()
+    
     
 class Technician(Employee):
     manager = models.ForeignKey(
@@ -117,6 +123,9 @@ class Technician(Employee):
         self.manager = None
         self.save()
         
+    # Manager #
+    ###########
+        
     ##############
     # Laboratory #
     
@@ -134,6 +143,8 @@ class Technician(Employee):
         self.laboratory = None
         self.save()
     
+    # Laboratory #
+    ##############
 
         
         

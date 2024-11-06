@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     
     # local apps
+    'home.apps.HomeConfig',
     'labs.apps.LabsConfig',
     'personnel.apps.PersonnelConfig',
     
