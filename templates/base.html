@@ -12,12 +12,11 @@
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}">
     {% endblock %}
-
-
 </head>
 <body>
-
-{% include 'partials/nav.html' %}
+<header class="sticky-top">
+    {% include 'partials/nav.html' %}
+</header>
 
 {% block header %}
     {# #}
@@ -26,7 +25,6 @@
 {% block content %}
     {# #}
 {% endblock %}
-
 
 {% block scripts %}
     <script src="{% static 'js/popper.min.js' %}"></script>

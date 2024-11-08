@@ -11,15 +11,11 @@ class LabAddForm(forms.ModelForm):
             'street', 'number', 'zip_code', 'city', 'country',
             'latitude', 'longitude', 'leadership_area', 'contact_email'
         ]
-        labels = {
-            'name': 'Laboratory full name',
-            'short_name': 'Shortened name',
-            'contact_email': 'Email address'
-        }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter laboratory name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter official name'}),
             'short_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter short name'}),
             'lab_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Set lab code'}),
+            'leadership_area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Group'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Laboratory description'}),
             'street': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Street name'}),
             'number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
@@ -28,8 +24,13 @@ class LabAddForm(forms.ModelForm):
             'country': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
             'latitude': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Latitude'}),
             'longitude': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Longitude'}),
-            'leadership_area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Leadership area'}),
-            'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email address'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'lab@example.com'}),
+        }
+        labels = {
+            'name': 'Laboratory full name',
+            'short_name': 'Shortened name',
+            'contact_email': 'Email address',
+            'leadership_area': 'Group'
         }
     
     def clean_short_name(self):
