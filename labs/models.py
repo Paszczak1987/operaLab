@@ -59,6 +59,10 @@ class Laboratory(models.Model):
         group_manager = apps.get_model('personnel', 'GroupManager')
         return group_manager.objects.get(laboratories=self)
     
+    def attach_group_manager(self, group_manager):
+        self.group_manager = group_manager
+        self.save()
+    
     def update_assigned_manager_name(self, assignment=True):
         if assignment:
             self.manager = f"{self.assigned_manager.first_name} {self.assigned_manager.last_name}"
@@ -85,14 +89,6 @@ class Laboratory(models.Model):
     def __repr__(self):
         return self.short_name
         
-    def formatted_address(self):
-        return {
-            'street': self.street,
-            'number': self.number,
-            'zip_code': self.zip_code,
-            'city': self.city,
-            'country': self.country,
-        }
     
     def has_gps_coordinates(self):
         return bool(None not in [self.latitude, self.longitude])
@@ -112,9 +108,5 @@ class Laboratory(models.Model):
             address = ', '.join(filter(None, address_parts))
             query = urlencode({'api': 1, 'query': address})
             return f"{base_url}?{query}"
-    
-    def google_map_url_2(self):
-        base_url = 'https://www.google.com/maps/search/'
-        return f"{base_url}?api=1&query={self.latitude},{self.longitude}"
     
     

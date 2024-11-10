@@ -5,46 +5,15 @@ from .utils import remove_diacritical_marks
 
 
 # Create your models here.
-class Employee(models.Model):
-    
-    first_name = models.CharField(max_length=100, default="", null=True, blank=True)
-    last_name = models.CharField(max_length=100, default="", null=True, blank=True)
-    username = models.CharField(max_length=100, default="", null=True, blank=True)
-    
-    phone_number = models.CharField(max_length=100, default="", null=True, blank=True)
-    email = models.EmailField(max_length=100, default="", null=True, blank=True)
-    
-    class Meta:
-        abstract = True
-    
-    def _generate_unique_username(self, *args, **kwargs):
-        # If username is not given, generate username automatically.
-        if not self.username:
-            # Get rid of non Unicode characters
-            created_username = f"{self.last_name[:4].lower()}_{self.first_name[:3].lower()}"
-            self.username = remove_diacritical_marks(created_username)
-            # Assure username uniqueness (add number, if such username already exist)
-            counter = 1
-            original_username = self.username
-            while type(self).objects.filter(username=self.username).exists():
-                self.username = f"{original_username}_{counter}"
-                counter += 1
-    
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-    
-    def __repr__(self):
-        return f"{self.pk}: {self.last_name}"
-
 class Group(models.Model):
     code = models.IntegerField(unique=True)
     name = models.CharField(max_length=100)
-        
+    
     def save(self, *args, **kwargs):
         if not self.name:
             self.name = f"Group {self.code}"
         super().save(*args, **kwargs)
-        
+    
     def clean(self):
         if not (10 <= self.code <= 99):
             raise ValidationError({'code': 'Code must be a two-digit number between 10 and 99.'})
@@ -56,12 +25,60 @@ class Group(models.Model):
                 name='code_must_be_two_digit'
             ),
         ]
+        
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self):
+        return self.code
+    
+class Employee(models.Model):
+    
+    first_name = models.CharField(max_length=100, default="", null=True, blank=True)
+    last_name = models.CharField(max_length=100, default="", null=True, blank=True)
+    username = models.CharField(max_length=100, default="", null=True, blank=True)
+    
+    phone_number = models.CharField(max_length=100, default="", null=True, blank=True)
+    email = models.EmailField(max_length=100, default="", null=True, blank=True)
+    
+    def _generate_unique_username(self, *args, **kwargs):
+        # If username is not given, generate username automatically.
+        if not self.username:
+            # Get rid of non Unicode characters
+            created_username = f"{self.last_name[:4].lower()}_{self.first_name[:3].lower()}"
+            self.username = remove_diacritical_marks(created_username)
+            # Assure username uniqueness (add number, if such username already exist)
+            counter = 1
+            original_username = self.username
+            # Check if the username already exists in the Employee table
+            while Employee.objects.filter(username=self.username).exists():
+                self.username = f"{original_username}_{counter}"
+                counter += 1
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
+    def __repr__(self):
+        return f"{self.pk}: {self.last_name}"
+    
+    def save(self, *args, **kwargs):
+        self._generate_unique_username()
+        super().save(*args, **kwargs)
+        
+
 
 class Director(Employee):
-    pass
+    group = models.OneToOneField(
+        'Group',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='director',
+        )
+    
 
 class GroupManager(Employee):
-    director = models.ForeignKey(
+    supervisor = models.ForeignKey(
         Director,
         on_delete=models.SET_NULL,
         null=True,
@@ -69,12 +86,14 @@ class GroupManager(Employee):
         related_name="group_managers",
     )
     
-    def save(self, *args, **kwargs):
-        self._generate_unique_username()
-        super().save(*args, **kwargs)
+    def take_over_lab_manager(self, manager):
+        manager.attach_supervisor(self)
+        if manager.has_laboratory():
+            lab = manager.get_laboratory()
+            lab.attach_group_manager(self)
    
 class LabManager(Employee):
-    group_manager = models.ForeignKey(
+    supervisor = models.ForeignKey(
         GroupManager,
         on_delete=models.SET_NULL,
         null=True,
@@ -90,10 +109,6 @@ class LabManager(Employee):
         related_name='assigned_manager'
     )
     
-    def save(self, *args, **kwargs):
-        self._generate_unique_username()
-        super().save(*args, **kwargs)
-    
     ##############
     # Laboratory #
     
@@ -103,10 +118,11 @@ class LabManager(Employee):
         if not laboratory.has_manager():
             self.laboratory = laboratory
             self.save()
-            if laboratory:
-                laboratory.update_assigned_manager_name()
+            laboratory.update_assigned_manager_name()
+            
             if self.has_technicians():
                 self._update_technicians_lab()
+                
             if laboratory.has_manager():
                 for tech in laboratory.list_technicians():
                     tech.attach_manager(self)
@@ -115,7 +131,9 @@ class LabManager(Employee):
         return self.laboratory is not None
     
     def get_laboratory(self):
-        return f"{self.laboratory!r}" if self.has_laboratory() else None
+        return self.laboratory if self.has_laboratory() else None
+    
+    
     
     def leave_the_lab(self):
         """Detache manager from laboratory and from technicians in it."""
@@ -138,11 +156,11 @@ class LabManager(Employee):
         return self.technicians.exists()
     
     def list_technicians(self):
-        return self.technicians.all() if self.has_technicians() else None
+        return list(self.technicians.all()) if self.has_technicians() else []
    
     def _update_technicians_lab(self):
         for technician in self.technicians.all():
-            technician.take_over_the_lab(self.laboratory)
+            technician.attach_laboratory(self.laboratory)
    
     # Technicians #
     ###############
@@ -183,10 +201,6 @@ class Technician(Employee):
         blank=True,
         related_name='technicians'
     )
-    
-    def save(self, *args, **kwargs):
-        self._generate_unique_username()
-        super().save(*args, **kwargs)
     
     ###########
     # Manager #
