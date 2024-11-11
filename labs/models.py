@@ -27,8 +27,8 @@ class Laboratory(models.Model):
             'unique': "This code already exists."
         }
     )
-    leadership_area = models.CharField(max_length=5, default="")
     
+    leadership_area = models.CharField(max_length=5, default="")
     description = models.TextField(default="", blank=True)
     
     street = models.CharField(max_length=100, default="", blank=True)
@@ -75,7 +75,7 @@ class Laboratory(models.Model):
         return self.manager != 'not assigned'
     
     def get_manager(self):
-        return f"{self.manager}" if self.has_manager() else None
+        return self.assigned_manager if self.has_manager() else None
     
     def has_technicians(self):
         return self.technicians.exists()
@@ -89,7 +89,6 @@ class Laboratory(models.Model):
     def __repr__(self):
         return self.short_name
         
-    
     def has_gps_coordinates(self):
         return bool(None not in [self.latitude, self.longitude])
     

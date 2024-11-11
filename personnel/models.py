@@ -33,24 +33,26 @@ class Group(models.Model):
         return self.code
     
 class Employee(models.Model):
-    
+    ROLE_CHOICES = {
+        'director': 'Director',
+        'group_manager': 'Group Manager',
+        'lab_manager': 'Laboratory Manager',
+        'technician': 'Technician',
+    }
     first_name = models.CharField(max_length=100, default="", null=True, blank=True)
     last_name = models.CharField(max_length=100, default="", null=True, blank=True)
     username = models.CharField(max_length=100, default="", null=True, blank=True)
+    role = models.CharField(max_length=25, choices=ROLE_CHOICES.items(), default="", null=True, blank=True)
     
     phone_number = models.CharField(max_length=100, default="", null=True, blank=True)
     email = models.EmailField(max_length=100, default="", null=True, blank=True)
     
     def _generate_unique_username(self, *args, **kwargs):
-        # If username is not given, generate username automatically.
         if not self.username:
-            # Get rid of non Unicode characters
             created_username = f"{self.last_name[:4].lower()}_{self.first_name[:3].lower()}"
             self.username = remove_diacritical_marks(created_username)
-            # Assure username uniqueness (add number, if such username already exist)
             counter = 1
             original_username = self.username
-            # Check if the username already exists in the Employee table
             while Employee.objects.filter(username=self.username).exists():
                 self.username = f"{original_username}_{counter}"
                 counter += 1
@@ -62,9 +64,17 @@ class Employee(models.Model):
         return f"{self.pk}: {self.last_name}"
     
     def save(self, *args, **kwargs):
+        if not self.role:
+            if isinstance(self, Director):
+                self.role = Employee.ROLE_CHOICES['director']
+            elif isinstance(self, GroupManager):
+                self.role = Employee.ROLE_CHOICES['group_manager']
+            elif isinstance(self, LabManager):
+                self.role = Employee.ROLE_CHOICES['lab_manager']
+            elif isinstance(self, Technician):
+                self.role = Employee.ROLE_CHOICES['technician']
         self._generate_unique_username()
         super().save(*args, **kwargs)
-        
 
 
 class Director(Employee):
@@ -91,6 +101,21 @@ class GroupManager(Employee):
         if manager.has_laboratory():
             lab = manager.get_laboratory()
             lab.attach_group_manager(self)
+            
+    def take_over_laboratory(self, laboratory):
+        laboratory.attach_group_manager(self)
+        if laboratory.has_manager():
+            manager = laboratory.assigned_manager
+            manager.attach_supervisor(self)
+            
+    def get_supervisor(self):
+        return self.supervisor
+   
+    def list_lab_managers(self):
+        return list(self.lab_managers.all()) if self.lab_managers.exists() else []
+    
+    def list_laboratories(self):
+        return list(self.laboratories.all()) if self.laboratories.exists() else []
    
 class LabManager(Employee):
     supervisor = models.ForeignKey(
@@ -112,10 +137,10 @@ class LabManager(Employee):
     ##############
     # Laboratory #
     
-    def take_over_the_lab(self, laboratory):
+    def take_over_laboratory(self, laboratory):
         """Attach manager and his technicians to laboratory.
         If laboratory has technicians attached they will get manager."""
-        if not laboratory.has_manager():
+        if not laboratory.has_supervisor():
             self.laboratory = laboratory
             self.save()
             laboratory.update_assigned_manager_name()
@@ -123,9 +148,9 @@ class LabManager(Employee):
             if self.has_technicians():
                 self._update_technicians_lab()
                 
-            if laboratory.has_manager():
+            if laboratory.has_supervisor():
                 for tech in laboratory.list_technicians():
-                    tech.attach_manager(self)
+                    tech.attach_supervisor(self)
     
     def has_laboratory(self):
         return self.laboratory is not None
@@ -133,9 +158,7 @@ class LabManager(Employee):
     def get_laboratory(self):
         return self.laboratory if self.has_laboratory() else None
     
-    
-    
-    def leave_the_lab(self):
+    def leave_laboratory(self):
         """Detache manager from laboratory and from technicians in it."""
         self.laboratory.update_assigned_manager_name(False)
         self.laboratory = None
@@ -144,7 +167,7 @@ class LabManager(Employee):
             self.laboratory.refresh_from_db()
         if self.has_technicians():
             for technician in self.technicians.all():
-                technician.remove_manager()
+                technician.remove_supervisor()
    
     # Laboratory #
     ##############
@@ -169,7 +192,7 @@ class LabManager(Employee):
     # Group manager #
     
     def attach_supervisor(self, group_manager):
-        self.group_manager = group_manager
+        self.supervisor = group_manager
         self.save()
     
     def has_supervisor(self):
@@ -184,6 +207,7 @@ class LabManager(Employee):
         
     # Group manager #
     #################
+    
     
 class Technician(Employee):
     manager = models.ForeignKey(
@@ -205,17 +229,17 @@ class Technician(Employee):
     ###########
     # Manager #
         
-    def attach_manager(self, manager):
+    def attach_supervisor(self, manager):
         self.manager = manager
         self.save()
     
-    def has_manager(self):
+    def has_supervisor(self):
         return self.manager is not None
     
-    def get_manager(self):
-        return self.manager if self.has_manager() else None
+    def get_supervisor(self):
+        return self.manager if self.has_supervisor() else None
     
-    def remove_manager(self):
+    def remove_supervisor(self):
         self.manager = None
         self.save()
         

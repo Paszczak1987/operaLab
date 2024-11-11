@@ -1,0 +1,30 @@
+{% extends 'personnel/personnel_base.html' %}
+
+{% block header %}
+    {#    #}
+{% endblock %}
+
+{% block personnel_content %}
+    <div class="container mt-5 mb-5 ">
+        <div class="container border rounded">
+            <div class="row">
+                <div class="col-md-1">id</div>
+                <div class="col-md-2">Name & Surname</div>
+                <div class="col-md-1">Username</div>
+                <div class="col-md-2">Role</div>
+                <div class="col-md-4">e-mail</div>
+                <div class="col-md-2">phone</div>
+            </div>
+            {% for emp in employees %}
+                <div class="row">
+                    <div class="col-md-1">{{ emp.pk }}</div>
+                    <div class="col-md-2">{{ emp }}</div>
+                    <div class="col-md-1">{{ emp.username }}</div>
+                    <div class="col-md-2">{{ emp.role }}</div>
+                    <div class="col-md-4">{{ emp.email }}</div>
+                    <div class="col-md-2">{{ emp.phone_number }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
