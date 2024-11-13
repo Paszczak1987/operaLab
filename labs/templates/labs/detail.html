@@ -2,9 +2,8 @@
 
 {% block labs_content %}
 
-    <div class="container mt-5 mb-5 ">
-
-        <div class="container border rounded">
+    <div class="container-fluid mt-5 mb-5 ps-md-5 pe-md-5">
+        <div class="container-xxl border border rounded">
 
             <div class="row">
 
@@ -33,7 +32,7 @@
 
             <div class="row">
 
-                <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top">
+                <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top border-end">
                     <p class="mb-0 mt-1 p-0 text-start">Laboratory location:</p>
                     {% if lab.has_postal_address %}
                         <p class="ms-2 mb-0 p-0 text-start text-secondary">Postal address:</p>
@@ -55,7 +54,8 @@
                     {% endif %}
                 </div>
 
-                <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top">
+
+                <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top border-end">
                     <p class="mb-0 mt-1 p-0 text-start">Essential data:</p>
                     <p class="ms-2 mb-1 p-0 text-start">Short name: <strong><i>{{ lab.short_name }}</i></strong></p>
                     <p class="ms-2 mb-1 p-0 text-start">Code: <strong><i>{{ lab.lab_code }}</i></strong></p>
@@ -71,11 +71,18 @@
                     </p>
                 </div>
 
+
                 <div class="col-md-4 py-2 align-items-start d-flex flex-column justify-content-start border-top">
                     <p class="mb-0 mt-1 p-0 text-start">Technicians:</p>
-                    {% for technician in lab.list_technicians %}
-                        <p class="ms-2 mb-1 p-0 text-start"><i>{{ technician }}</i></p>
-                    {% endfor %}
+                    {% if lab.has_technicians %}
+                        {% for technician in lab.list_technicians %}
+                            <p class="ms-2 mb-1 p-0 text-start"><i>{{ technician }}</i></p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="ms-2 mb-1 p-0 text-start"><strong class=" text-danger"><i>
+                            not assigned
+                        </i></strong></p>
+                    {% endif %}
                 </div>
 
             </div>

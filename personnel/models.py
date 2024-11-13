@@ -36,7 +36,7 @@ class Employee(models.Model):
     ROLE_CHOICES = {
         'director': 'Director',
         'group_manager': 'Group Manager',
-        'lab_manager': 'Laboratory Manager',
+        'lab_manager': 'Lab Manager',
         'technician': 'Technician',
     }
     first_name = models.CharField(max_length=100, default="", null=True, blank=True)
@@ -116,6 +116,7 @@ class GroupManager(Employee):
     
     def list_laboratories(self):
         return list(self.laboratories.all()) if self.laboratories.exists() else []
+   
    
 class LabManager(Employee):
     supervisor = models.ForeignKey(

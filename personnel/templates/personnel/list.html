@@ -5,25 +5,55 @@
 {% endblock %}
 
 {% block personnel_content %}
-    <div class="container mt-5 mb-5 ">
-        <div class="container border rounded">
-            <div class="row">
-                <div class="col-md-1">id</div>
-                <div class="col-md-2">Name & Surname</div>
-                <div class="col-md-1">Username</div>
-                <div class="col-md-2">Role</div>
-                <div class="col-md-4">e-mail</div>
-                <div class="col-md-2">phone</div>
-            </div>
-            {% for emp in employees %}
-                <div class="row">
-                    <div class="col-md-1">{{ emp.pk }}</div>
-                    <div class="col-md-2">{{ emp }}</div>
-                    <div class="col-md-1">{{ emp.username }}</div>
-                    <div class="col-md-2">{{ emp.role }}</div>
-                    <div class="col-md-4">{{ emp.email }}</div>
-                    <div class="col-md-2">{{ emp.phone_number }}</div>
+    <div class="container-fluid mt-5 mb-5 ps-md-5 pe-md-5">
+        <div class="container-xxl border rounded">
+
+            <div class="row py-2">
+                <div class="col-5 col-sm-6 align-content-center">
+                    <div class="row row-cols-1 row-cols-lg-3 text-center text-lg-start">
+                        <div class="col col-lg-5"><strong>Role</strong></div>
+                        <div class="col col-lg-5"><strong>Name & Surname</strong></div>
+                        <div class="col col-lg-2"><strong>Username</strong></div>
+                    </div>
                 </div>
+                <div class="col-7 col-sm-6 align-content-center">
+                    <div class="row row-cols-1 row-cols-lg-2 text-center text-lg-start">
+                        <div class="col col-lg-4 text-center"><strong>Phone</strong></div>
+                        <div class="col col-lg-8"><strong>email</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            {% for emp in employees %}
+
+                <div class="row py-2 border-top">
+                    <div class="col-5 col-sm-6">
+                        <div class="row row-cols-1 row-cols-lg-3 text-center text-lg-start">
+                            <div class="col col-lg-5 align-content-center">{{ emp.role }}</div>
+                            <div class="col col-lg-5">
+                                {% if emp.role == "Technician" %}
+                                    {% url 'personnel:technician_view' pk=emp.pk as emp_url %}
+                                {% elif emp.role == "Lab Manager" %}
+                                    {% url 'personnel:lab_manager_view' pk=emp.pk as emp_url %}
+                                {% elif emp.role == "Group Manager" %}
+                                    {% url 'personnel:group_manager_view' pk=emp.pk as emp_url %}
+                                {% elif emp.role == "Director" %}
+                                    {% url 'personnel:director_view' pk=emp.pk as emp_url %}
+                                {% endif %}
+                                <a href="{{ emp_url }}">{{ emp }}</a>
+                            </div>
+
+                            <div class="col col-lg-2 align-content-center">{{ emp.username }}</div>
+                        </div>
+                    </div>
+                    <div class="col-7 col-sm-6 align-content-center">
+                        <div class="row row-cols-1 row-cols-lg-2 text-center text-lg-start">
+                            <div class="col col-lg-4 text-center">{{ emp.phone_number }}</div>
+                            <div class="col col-lg-8 text-break">{{ emp.email }}</div>
+                        </div>
+                    </div>
+                </div>
+
             {% endfor %}
         </div>
     </div>
