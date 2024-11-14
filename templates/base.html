@@ -16,6 +16,25 @@
 <body>
 <header class="sticky-top">
     {% include 'partials/nav.html' %}
+
+    <div class="container-fluid">
+        {% if breadcrumbs %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for crumb in breadcrumbs %}
+                        {% if crumb.url %}
+                            <li class="breadcrumb-item">
+                                <a href="{% url crumb.url %}">{{ crumb.name }}</a>
+                            </li>
+                        {% else %}
+                            <li class="breadcrumb-item active" aria-current="page">{{ crumb.name }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </nav>
+        {% endif %}
+    </div>
+
 </header>
 
 {% block header %}
