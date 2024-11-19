@@ -7,12 +7,50 @@
 {% block personnel_content %}
 
     <div class="container-fluid mt-5 mb-5 ps-md-5 pe-md-5">
-        <div class="container-xxl border rounded">
-            <div class="row">
-                <h5 class="mb-0"><span class="text-warning-emphasis">{{ emp }}</span></h5>
+        <div class="container-xxl border border rounded">
 
+            <div class="row">
+                <div class="col-md-6 p-3 align-self-center">
+
+                    <p class="text-wrap mt-2 mb-0">
+                        {% if emp.role == 'Technician' %}
+                            Laboratory technician
+                        {% endif %}
+                    </p>
+
+                    <h4 class="mb-0"><span class="text-warning-emphasis">{{ emp }}</span></h4>
+                    <p class="mt-0 mb-0"><i><span class="text-secondary">phone: </span>
+                        {% if emp.phone_number %}
+                            <span class="text-body">
+                                    {{ emp.phone_number }}
+                                </span>
+                        {% else %}
+                            <span class="text-danger">not assigned</span>
+                        {% endif %}
+                    </i>
+                    </p>
+                    <p class=" mt-0 mb-0"><i><span class="text-secondary">email: </span>
+                        {% if emp.email %}
+                            <span class="text-body">
+                                    {{ emp.email }}
+                                </span>
+                        {% else %}
+                            <span class="text-danger">not assigned</span>
+                        {% endif %}
+                    </i>
+                    </p>
+                </div>
+
+
+                <div class="col-md-6 align-self-center p-3 d-flex justify-content-center">
+                    <a class="btn mx-2 btn-outline-secondary"
+                       href="{{ request.META.HTTP_REFERER|default:'#' }}">Back</a>
+                    <a class="btn mx-2 btn-outline-warning" href="#">Update</a>
+                    <a class="btn mx-2 btn-outline-danger" href="#">Remove</a>
+                </div>
             </div>
         </div>
     </div>
 
 {% endblock %}
+

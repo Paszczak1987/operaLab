@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="col-md-6 align-self-center p-3 d-flex justify-content-center">
-                    <a class="btn mx-2 btn-outline-secondary" href="{% url 'labs:list' %}">Back</a>
+                    <a class="btn mx-2 btn-outline-secondary" href="{{ request.META.HTTP_REFERER|default:'#' }}">Back</a>
                     <a class="btn mx-2 btn-outline-warning" href="{% url 'labs:edit' pk=lab.pk %}">Update</a>
                     <a class="btn mx-2 btn-outline-danger" href="#">Remove</a>
                     {% if lab.has_postal_address or lab.has_gps_coordinates %}
@@ -61,7 +61,10 @@
                     <p class="ms-2 mb-1 p-0 text-start">Code: <strong><i>{{ lab.lab_code }}</i></strong></p>
                     <p class="ms-2 mb-1 p-0 text-start">Group: <strong><i>{{ lab.leadership_area }}</i></strong></p>
                     {% if lab.has_manager %}
-                        <p class="ms-2 mb-1 p-0 text-start">Manager: <strong><i>{{ lab.get_manager }}</i></strong></p>
+                        <p class="ms-2 mb-1 p-0 text-start">Manager: <a class="link-underline link-underline-opacity-0"
+                                href="{% url 'personnel:lab_manager_view' pk=lab.get_manager.pk %}"><strong><i>{{ lab.get_manager }}</i></strong></a>
+                        </p>
+
                     {% else %}
                         <p class="ms-2 mb-1 p-0 text-start">Manager: <strong class=" text-danger"><i>
                             not assigned
@@ -76,7 +79,9 @@
                     <p class="mb-0 mt-1 p-0 text-start">Technicians:</p>
                     {% if lab.has_technicians %}
                         {% for technician in lab.list_technicians %}
-                            <p class="ms-2 mb-1 p-0 text-start"><i>{{ technician }}</i></p>
+                            <a class="ms-2 mb-1 p-0 text-start link-underline link-underline-opacity-0"
+                               href="{% url 'personnel:technician_view' pk=technician.pk %}"><i>{{ technician }}</i></a>
+                            {#                            <p class="ms-2 mb-1 p-0 text-start"><i>{{ technician }}</i></p>#}
                         {% endfor %}
                     {% else %}
                         <p class="ms-2 mb-1 p-0 text-start"><strong class=" text-danger"><i>
